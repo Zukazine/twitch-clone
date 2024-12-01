@@ -47,7 +47,10 @@ export const ConnectModel = () => {
           toast.success("Ingress created")
           closeRef?.current?.click()
         })
-        .catch(() => toast.error("Something went wrong"))
+        .catch((error) => {
+          console.log(error)
+          toast.error("Something went wrong")
+        })
     })
   }
 
@@ -91,7 +94,7 @@ export const ConnectModel = () => {
           <Button
             disabled={isPending}
             variant={"primary"}
-            onClick={onSubmit}
+            onClick={() => {onSubmit()}}
           >
             Generate
           </Button>

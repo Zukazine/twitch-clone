@@ -57,24 +57,21 @@ export const createIngress = async (ingressType: IngressInput) => {
   if (ingressType === IngressInput.WHIP_INPUT) {
     options.bypassTranscoding = true
   } else {
-      const videoOptions = new IngressVideoOptions();
-      videoOptions.name = "Twitch_stream";
-      videoOptions.source = TrackSource.CAMERA;
-      videoOptions.encodingOptions = {
-        case: "preset",
-        value: IngressVideoEncodingPreset.H264_1080P_30FPS_3_LAYERS,
-      };
+      options.video = new IngressVideoOptions({
+        source: TrackSource.CAMERA,
+        encodingOptions: {
+          case: "preset",
+          value: IngressVideoEncodingPreset.H264_1080P_30FPS_3_LAYERS,
+        }
+      });
 
-      const audioOptions = new IngressAudioOptions();
-      audioOptions.name = "Twitch_audio";
-      audioOptions.source = TrackSource.MICROPHONE
-      audioOptions.encodingOptions = {
-        case: "preset",
-        value: IngressAudioEncodingPreset.OPUS_STEREO_96KBPS,
-      };
-
-      options.video = videoOptions;
-      options.audio = audioOptions
+      options.audio = new IngressAudioOptions({
+        source: TrackSource.MICROPHONE,
+        encodingOptions: {
+          case: "preset",
+          value: IngressAudioEncodingPreset.OPUS_STEREO_96KBPS,
+        }
+      })
   }
 
   const ingress = await ingressClient.createIngress(
@@ -86,6 +83,35 @@ export const createIngress = async (ingressType: IngressInput) => {
     throw new Error("Failed to create ingress")
   }
 
+  const sanitizedIngress = {
+    ingressId: ingress.ingressId,
+    name: ingress.name,
+    streamKey: ingress.streamKey,
+    url: ingress.url,
+    inputType: ingress.inputType,
+    bypassTranscoding: ingress.bypassTranscoding,
+    roomName: ingress.roomName,
+    participantIdentity: ingress.participantIdentity,
+    participantName: ingress.participantName,
+    participantMetadata: ingress.participantMetadata,
+    reusable: ingress.reusable,
+    enableTranscoding: ingress.enableTranscoding,
+    audio: ingress.audio ? { ...ingress.audio } : null,
+    video: ingress.video ? { ...ingress.video } : null,
+    state: ingress.state
+      ? {
+          status: ingress.state.status,
+          error: ingress.state.error,
+          roomId: ingress.state.roomId,
+          startedAt: ingress.state.startedAt?.toString(),
+          endedAt: ingress.state.endedAt?.toString(),
+          updatedAt: ingress.state.updatedAt?.toString(),
+          resourceId: ingress.state.resourceId,
+          tracks: ingress.state.tracks || [],
+        }
+      : null,
+  };
+
   await db.stream.update({
     where: { userId: self.id },
     data: {
@@ -96,5 +122,6 @@ export const createIngress = async (ingressType: IngressInput) => {
   })
 
   revalidatePath(`/u/${self.username}/keys`)
-  return ingress
+
+  return sanitizedIngress
 }
