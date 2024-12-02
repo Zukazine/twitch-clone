@@ -10,8 +10,8 @@ const receiver = new WebhookReceiver(
 
 export async function POST(req: Request){
   const body = await req.text()
-  const headerPayload = headers()
-  const authorization = (await headerPayload).get("Authorization")
+  const headerPayload = await headers()
+  const authorization = headerPayload.get("Authorization")
 
   if (!authorization) {
     return new Response("No authorization header", { status: 400 })
