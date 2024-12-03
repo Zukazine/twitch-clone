@@ -15,7 +15,7 @@ export const ChatToggle = () => {
     if (collapsed) {
       onExpand()
     } else {
-      onCollapse
+      onCollapse()
     }
   }
 
