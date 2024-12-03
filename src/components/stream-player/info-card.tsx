@@ -25,7 +25,7 @@ export const InfoCard = ({
 
   return (
     <div className='px-4'>
-      <div className='rounded-full bg-background'>
+      <div className='rounded-xl bg-background'>
         <div className='flex items-center gap-x-2.5 p-4'>
           <div className='rounded-md bg-blue-600 p-2 h-auto w-auto'>
             <Pencil className='size-5'/>
