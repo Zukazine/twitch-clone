@@ -1,7 +1,7 @@
 import { Thumbnail, ThumbnailSkeleton } from "@/components/thumbnail"
 import { Skeleton } from "@/components/ui/skeleton"
 import { VerifiedMark } from "@/components/verified-mark"
-import { Stream, User } from "@prisma/client"
+import { User } from "@prisma/client"
 import { formatDistanceToNow } from "date-fns"
 import Link from "next/link"
 
