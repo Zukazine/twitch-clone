@@ -19,25 +19,37 @@ export async function POST(req: Request){
 
   const event = receiver.receive(body, authorization)
 
-  if ((await event).event === "ingress_started"){
-    await db.stream.update({
-      where: {
-        ingressId: (await event).ingressInfo?.ingressId
-      },
-      data: {
-        isLive: true
-      }
-    })
+  try {
+    const event = await receiver.receive(body, authorization);
+
+    if (event.event === "ingress_started") {
+      await db.stream.update({
+        where: {
+          ingressId: event.ingressInfo?.ingressId,
+        },
+        data: {
+          isLive: true,
+        },
+      });
+      return new Response("Ingress started event handled", { status: 200 });
+    }
+
+    if (event.event === "ingress_ended") {
+      await db.stream.update({
+        where: {
+          ingressId: event.ingressInfo?.ingressId,
+        },
+        data: {
+          isLive: false,
+        },
+      });
+      return new Response("Ingress ended event handled", { status: 200 });
+    }
+
+    return new Response("Unhandled event type", { status: 400 });
+  } catch (error) {
+    console.error("Error processing webhook:", error);
+    return new Response("Error processing webhook", { status: 500 });
   }
 
-  if ((await event).event === "ingress_ended"){
-    await db.stream.update({
-      where: {
-        ingressId: (await event).ingressInfo?.ingressId
-      },
-      data: {
-        isLive: false
-      }
-    })
-  }
 }
