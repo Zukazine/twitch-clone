@@ -4,16 +4,11 @@ import { notFound } from "next/navigation"
 import { isBlockedByUser } from "@/lib/block-service"
 import { StreamPlayer } from "@/components/stream-player"
 
-interface UserPageProps {
-  params: {
-    username: string
-  }
-}
+type Params = Promise<{ username: string }>
 
-const UserPage = async ({
-  params
-}: UserPageProps) => {
-  const user = await getUserByUsername(params.username);
+const UserPage = async (props: { params: Params}) => {
+  const resolvedParams = await props.params
+  const user = await getUserByUsername(resolvedParams.username);
 
   if (!user || !user.stream){
     notFound()
