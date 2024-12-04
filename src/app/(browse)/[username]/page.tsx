@@ -13,8 +13,7 @@ interface UserPageProps {
 const UserPage = async ({
   params
 }: UserPageProps) => {
-  const resolvedParams = await params
-  const user = await getUserByUsername(resolvedParams.username)
+  const user = await getUserByUsername(params.username);
 
   if (!user || !user.stream){
     notFound()
