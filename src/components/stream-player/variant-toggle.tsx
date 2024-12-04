@@ -1,6 +1,6 @@
 'use client'
 
-import { ArrowLeftFromLine, ArrowRightFromLine, MessageSquare, Users } from "lucide-react"
+import { MessageSquare, Users } from "lucide-react"
 
 import Hint from "../hint"
 import { Button } from "../ui/button"

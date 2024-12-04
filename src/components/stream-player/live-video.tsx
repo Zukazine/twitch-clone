@@ -4,8 +4,8 @@ import { useEffect, useRef, useState } from "react"
 import { Participant, Track } from "livekit-client"
 import { useTracks } from "@livekit/components-react"
 import { FullScreenControl } from "./fullscreen-control"
-import { useEventListener } from "usehooks-ts"
 import { VolumeControl } from "./volume-control"
+import { useEventListener } from "usehooks-ts"
 
 interface LiveVideoProps {
   participant: Participant
@@ -54,6 +54,8 @@ export const LiveVideo = ({
     const isCurrentlyFullscreen = document.fullscreenElement !== null
     setIsFullscreen(isCurrentlyFullscreen)
   }
+
+  useEventListener("fullscreenchange", handleFullscreenChange, wrapperRef)
 
   useTracks([Track.Source.Camera, Track.Source.Microphone])
     .filter((track) => track.participant.identity === participant.identity)

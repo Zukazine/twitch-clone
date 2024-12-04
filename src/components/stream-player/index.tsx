@@ -5,7 +5,6 @@ import { useChatSidebar } from "@/store/use-chat-sidebar"
 
 import { cn } from "@/lib/utils"
 import { LiveKitRoom } from "@livekit/components-react" 
-import { Stream, User } from "@prisma/client"
 import { Video, VideoSkeleton } from "./video"
 import { Chat, ChatSkeleton } from "./chat"
 import { ChatToggle } from "./chat-toggle"

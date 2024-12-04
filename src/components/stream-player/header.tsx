@@ -1,6 +1,5 @@
 'use client'
 
-import { hostname } from "os"
 import { UserAvatar, UserAvatarSkeleton } from "../user-avatar"
 import { VerifiedMark } from "../verified-mark"
 import { useParticipants, useRemoteParticipant } from "@livekit/components-react"

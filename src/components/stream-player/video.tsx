@@ -1,6 +1,6 @@
 'use client'
 
-import { ConnectionState, Participant, Track } from "livekit-client"
+import { ConnectionState, Track } from "livekit-client"
 import { 
   useConnectionState,
   useRemoteParticipant,
